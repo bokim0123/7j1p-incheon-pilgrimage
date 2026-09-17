@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>7J1P 인천 성지 순례 나눔</title>
+<style>
+  :root{
+    --bg:#f8f5ef;
+    --card:#fffdf9;
+    --text:#242424;
+    --muted:#73706b;
+    --line:#e9e2d7;
+    --accent:#66735b;
+    --accent-deep:#4f5c47;
+    --accent2:#9a8167;
+    --soft:#f2ece2;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",sans-serif;
+    background:var(--bg);
+    color:var(--text);
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:20px 16px 40px}
+  .hero{
+    padding:22px 20px;
+    background:linear-gradient(180deg,#fff,#f4f0e8);
+    border:1px solid var(--line);
+    border-radius:22px;
+    margin-bottom:18px;
+  }
+  .badge{
+    display:inline-block;
+    padding:6px 10px;
+    border-radius:999px;
+    background:#ece7dc;
+    font-size:12px;
+    color:#6a5f50;
+    margin-bottom:12px;
+  }
+  h1{font-size:28px;line-height:1.35;margin:0 0 10px}
+  .subtitle{font-size:15px;line-height:1.7;color:var(--muted);margin:0}
+  .route{
+    margin:20px 0;
+    display:grid;
+    gap:12px;
+    position:relative;
+  }
+  .route::before{
+    content:"";
+    position:absolute;
+    left:22px;
+    top:18px;
+    bottom:18px;
+    width:1px;
+    background:#ddd6c8;
+    z-index:0;
+  }
+  .route-card{
+    width:100%;
+    display:grid;
+    grid-template-columns:34px 34px 1fr 22px;
+    align-items:center;
+    gap:10px;
+    text-align:left;
+    border:1px solid rgba(141,125,100,.18);
+    background:rgba(255,253,249,.96);
+    border-radius:18px;
+    padding:15px 14px;
+    cursor:pointer;
+    box-shadow:0 4px 14px rgba(78,65,48,.05);
+    position:relative;
+    z-index:1;
+    transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  .route-card:active{
+    transform:scale(.995);
+  }
+  .route-step{
+    width:26px;
+    height:26px;
+    border-radius:50%;
+    background:#f2eee5;
+    border:1px solid #ddd4c5;
+    color:#7a6d5a;
+    font-size:11px;
+    font-weight:800;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .route-icon{
+    font-size:18px;
+    line-height:1;
+  }
+  .route-main{min-width:0}
+  .route-title{
+    font-size:16px;
+    font-weight:800;
+    line-height:1.35;
+    color:var(--text);
+  }
+  .route-keyword{
+    margin-top:4px;
+    font-size:12.5px;
+    font-weight:900;
+    letter-spacing:.14em;
+    color:var(--accent2);
+  }
+  .route-desc{
+    margin-top:5px;
+    font-size:12px;
+    line-height:1.5;
+    color:var(--muted);
+  }
+  .route-chevron{
+    font-size:26px;
+    line-height:1;
+    color:#9d9488;
+    text-align:right;
+  }
+  .panel{
+    display:none;
+    background:var(--card);
+    border:1px solid rgba(141,125,100,.16);
+    border-radius:20px;
+    padding:20px;
+    margin-top:16px;
+    box-shadow:0 6px 18px rgba(78,65,48,.05);
+  }
+  .panel.active{display:block}
+  .eyebrow{font-size:12px;color:var(--accent);font-weight:800;letter-spacing:.02em}
+  h2{font-size:22px;margin:8px 0 8px}
+  .guide{font-size:14px;line-height:1.7;color:var(--muted);margin-bottom:16px}
+
+  .keyword{
+    display:inline-block;
+    margin:2px 0 10px;
+    font-size:14px;
+    font-weight:900;
+    letter-spacing:.14em;
+    color:var(--accent2);
+  }
+  .question{
+    padding:24px 20px;
+    background:linear-gradient(180deg,#fffdfa,#f7f1e8);
+    border:1px solid rgba(154,129,103,.18);
+    border-radius:20px;
+    font-size:20px;
+    font-weight:800;
+    line-height:1.7;
+    min-height:136px;
+    display:flex;
+    align-items:center;
+    box-shadow:0 5px 16px rgba(76,63,48,.04);
+  }
+  .actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+  .btn{
+    flex:1;
+    min-width:120px;
+    border:0;
+    border-radius:14px;
+    padding:14px 16px;
+    font-size:15px;
+    font-weight:800;
+    cursor:pointer;
+  }
+  .primary{background:var(--accent-deep);color:white}
+  .secondary{background:var(--soft);color:#4f493f}
+  .mission{
+    margin-top:14px;
+    padding:14px 16px;
+    border-left:4px solid var(--accent2);
+    background:#f5f1e8;
+    border-radius:10px;
+    line-height:1.7;
+    font-size:14px;
+  }
+  .footer{
+    text-align:center;
+    color:var(--muted);
+    font-size:12px;
+    margin-top:26px;
+    line-height:1.6;
+  }
+
+  @media (max-width:480px){
+    .wrap{padding:14px 12px 32px}
+    .hero{border-radius:18px}
+    h1{font-size:25px}
+    .route-card{grid-template-columns:30px 30px 1fr 18px;padding:14px 12px}
+    .route::before{left:19px}
+    .route-title{font-size:15px}
+    .route-desc{font-size:11.5px}
+  }
+
+
+  .kicker{
+    margin:2px 0 12px;
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:.03em;
+    color:var(--accent2);
+  }
+  .question-wrap{
+    padding:10px 0 0;
+  }
+  .question-label{
+    margin:0 0 8px 2px;
+    font-size:11px;
+    font-weight:900;
+    letter-spacing:.14em;
+    color:var(--accent2);
+  }
+
+
+  .step-action{
+    margin-top:14px;
+    padding:16px;
+    background:var(--soft);
+    border-radius:14px;
+    border:1px solid rgba(154,129,103,.12);
+  }
+  .step-action-label{
+    font-size:11px;
+    font-weight:900;
+    letter-spacing:.14em;
+    color:var(--accent2);
+    margin-bottom:6px;
+  }
+  .step-action-text{
+    font-size:14px;
+    line-height:1.7;
+    color:#4e4a44;
+  }
+  .closing{
+    margin-top:22px;
+    padding:22px 18px;
+    text-align:center;
+    background:linear-gradient(180deg,#f5efe5,#eee6da);
+    border-radius:18px;
+    border:1px solid rgba(154,129,103,.14);
+  }
+  .closing-label{
+    font-size:11px;
+    font-weight:900;
+    letter-spacing:.14em;
+    color:var(--accent2);
+    margin-bottom:12px;
+  }
+  .closing p{
+    margin:0;
+    font-size:14px;
+    line-height:1.9;
+    color:#4e4a44;
+  }
+  .closing-last{
+    margin-top:12px !important;
+    font-weight:800;
+    color:var(--accent-deep) !important;
+  }
+
+
+  .turn-box{
+    margin-top:12px;
+    padding:14px 15px;
+    border-radius:14px;
+    background:#f7f2ea;
+    border:1px dashed rgba(154,129,103,.28);
+  }
+  .turn-label{
+    font-size:10px;
+    font-weight:900;
+    letter-spacing:.14em;
+    color:var(--accent2);
+    margin-bottom:6px;
+  }
+  .turn-direction{
+    font-size:14px;
+    font-weight:900;
+    color:var(--accent-deep);
+    margin-bottom:6px;
+  }
+  .turn-note{
+    font-size:12px;
+    line-height:1.65;
+    color:#7a746c;
+  }
+
+
+  .howto{
+    margin:14px 0 18px;
+    padding:16px 17px;
+    background:rgba(255,253,249,.9);
+    border:1px solid rgba(154,129,103,.14);
+    border-radius:16px;
+    box-shadow:0 4px 12px rgba(76,63,48,.035);
+  }
+  .howto-title{
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.08em;
+    color:var(--accent-deep);
+    margin-bottom:7px;
+  }
+  .howto p{
+    margin:0;
+    font-size:13px;
+    line-height:1.75;
+    color:#6f6a63;
+  }
+  .howto strong{
+    color:var(--text);
+  }
+  }
+
+
+  .gentle-note{
+    margin:24px 0 0;
+    padding:15px 16px;
+    text-align:center;
+    border-radius:14px;
+    background:#f5f0e8;
+    border:1px solid rgba(154,129,103,.12);
+    font-size:12px;
+    line-height:1.7;
+    color:#777168;
+  }
+
+
+  .event-title{
+    margin:0 0 8px;
+    font-size:15px;
+    font-weight:900;
+    letter-spacing:.02em;
+    color:var(--accent-deep);
+  }
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <span class="badge">여기모여 SEASON 6 — 3조 7J1P</span>
+    <div class="event-title">인천 성지순례 나눔</div>
+    <h1>그들이 건넌 바다,<br>우리가 건널 바다</h1>
+    <p class="kicker">서로 다른 우리가, 한 걸음씩 가까워지는 시간</p>
+    <p class="subtitle">
+      정답보다 서로의 이야기를 듣는 시간.<br>
+      지금 있는 장소를 선택하고, 질문 하나로 대화를 시작해보세요.
+    </p>
+  </section>
+
+
+  <section class="howto">
+    <div class="howto-title">이렇게 사용해요</div>
+    <p>
+      질문을 하나 뽑고, <strong>뽑은 사람이 먼저</strong> 답합니다.<br>
+      이후 화면에 나온 방향대로 돌아가며 이야기해요.<br>
+      어렵다면 한 번 패스해도 괜찮습니다.<br>
+      질문보다 서로의 이야기를 편하게 이어가 주세요.
+    </p>
+  </section>
+
+  <div class="route">
+    <button type="button" class="route-card" onclick="openStage('taxi')">
+      <div class="route-step">01</div>
+      <div class="route-icon">🚕</div>
+      <div class="route-main">
+        <div class="route-title">택시 이동</div>
+        <div class="route-keyword">첫마디</div>
+        <div class="route-desc">가볍게, 서로의 이야기부터</div>
+      </div>
+      <div class="route-chevron">›</div>
+    </button>
+
+    <button type="button" class="route-card" onclick="openStage('lunch')">
+      <div class="route-step">02</div>
+      <div class="route-icon">🍚</div>
+      <div class="route-main">
+        <div class="route-title">점심 식사</div>
+        <div class="route-keyword">발견</div>
+        <div class="route-desc">다름 속에서 하나씩 알아가기</div>
+      </div>
+      <div class="route-chevron">›</div>
+    </button>
+
+    <button type="button" class="route-card" onclick="openStage('haean')">
+      <div class="route-step">03</div>
+      <div class="route-icon">⛪</div>
+      <div class="route-main">
+        <div class="route-title">해안성당</div>
+        <div class="route-keyword">머묾</div>
+        <div class="route-desc">잠시 멈춰 마음을 바라보기</div>
+      </div>
+      <div class="route-chevron">›</div>
+    </button>
+
+    <button type="button" class="route-card" onclick="openStage('jemul')">
+      <div class="route-step">04</div>
+      <div class="route-icon">🕯️</div>
+      <div class="route-main">
+        <div class="route-title">제물진두 순교성지</div>
+        <div class="route-keyword">건넘</div>
+        <div class="route-desc">내 안의 작은 바다를 바라보기</div>
+      </div>
+      <div class="route-chevron">›</div>
+    </button>
+
+    <button type="button" class="route-card" onclick="openStage('boundary')">
+      <div class="route-step">05</div>
+      <div class="route-icon">🚶</div>
+      <div class="route-main">
+        <div class="route-title">청·일조계지</div>
+        <div class="route-keyword">경계</div>
+        <div class="route-desc">우리 사이의 거리를 돌아보기</div>
+      </div>
+      <div class="route-chevron">›</div>
+    </button>
+
+    <button type="button" class="route-card" onclick="openStage('cafe')">
+      <div class="route-step">06</div>
+      <div class="route-icon">☕</div>
+      <div class="route-main">
+        <div class="route-title">카페 나눔</div>
+        <div class="route-keyword">연결</div>
+        <div class="route-desc">오늘의 이야기를 서로에게 이어가기</div>
+      </div>
+      <div class="route-chevron">›</div>
+    </button>
+  </div>
+
+  <section id="taxi" class="panel">
+    <div class="eyebrow">STEP 1</div>
+    <h2>택시 이동</h2>
+    <div class="keyword">첫마디</div>
+    <p class="guide">처음부터 깊은 이야기를 하지 않아도 괜찮아요. 질문 하나를 골라 가볍게 답하고, 마음이 가는 답에는 한 번 더 물어봐 주세요.</p>
+    <div class="question-wrap"><div class="question-label">오늘의 질문</div><div id="q-taxi" class="question" aria-live="polite"></div></div>
+    <div class="turn-box">
+      <div class="turn-label">이번 순서</div>
+      <div id="turn-taxi" class="turn-direction">질문을 뽑은 사람이 먼저!</div>
+      <div class="turn-note">시계방향 또는 반시계방향으로 돌아가며 답해요.<br>바로 답하기 어렵다면 한 번 패스하고 마지막에 다시 이야기해도 괜찮아요.</div>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn primary" onclick="nextQuestion('taxi')">새 질문 뽑기 🎲</button>
+    </div>
+  </section>
+
+  <section id="lunch" class="panel">
+    <div class="eyebrow">STEP 2</div>
+    <h2>점심 식사</h2>
+    <div class="keyword">발견</div>
+    <p class="guide">식사 중 2~4개의 질문만 골라 이야기해보세요. 질문보다 서로의 답에서 이어지는 이야기가 더 중요합니다.</p>
+    <div class="question-wrap"><div class="question-label">오늘의 질문</div><div id="q-lunch" class="question" aria-live="polite"></div></div>
+    <div class="turn-box">
+      <div class="turn-label">이번 순서</div>
+      <div id="turn-lunch" class="turn-direction">질문을 뽑은 사람이 먼저!</div>
+      <div class="turn-note">시계방향 또는 반시계방향으로 돌아가며 답해요.<br>바로 답하기 어렵다면 한 번 패스하고 마지막에 다시 이야기해도 괜찮아요.</div>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn primary" onclick="nextQuestion('lunch')">새 질문 뽑기 🎲</button>
+    </div>
+  </section>
+
+  <section id="haean" class="panel">
+    <div class="eyebrow">STEP 3</div>
+    <h2>해안성당</h2>
+    <div class="keyword">머묾</div>
+    <p class="guide">여기서는 질문 하나만 골라 잠시 머물러 봅니다. 답을 말하지 않아도 괜찮습니다. 마음속으로 천천히 바라보면 충분합니다.</p>
+    <div class="question-wrap"><div class="question-label">오늘의 묵상</div><div id="q-haean" class="question" aria-live="polite"></div></div>
+    <div class="step-action">
+      <div class="step-action-label">한 걸음</div>
+      <div class="step-action-text">잠시 휴대폰을 내려놓고, 1분 정도 조용히 머물러보세요.</div>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn primary" onclick="nextQuestion('haean')">다른 묵상 보기</button>
+    </div>
+  </section>
+
+  <section id="jemul" class="panel">
+    <div class="eyebrow">STEP 4</div>
+    <h2>제물진두 순교성지</h2>
+    <div class="keyword">건넘</div>
+    <p class="guide">한두 개의 질문만 골라 천천히 묵상해봅니다. 누군가가 건넜던 바다를 떠올리며, 오늘 내 앞에 놓인 작은 바다를 바라봅니다.</p>
+    <div class="question-wrap"><div class="question-label">오늘의 묵상</div><div id="q-jemul" class="question" aria-live="polite"></div></div>
+    <div class="step-action">
+      <div class="step-action-label">한 걸음</div>
+      <div class="step-action-text">오늘 이후 실천해보고 싶은 작은 행동 하나를 마음속으로 정해보세요.</div>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn primary" onclick="nextQuestion('jemul')">다른 묵상 보기</button>
+    </div>
+  </section>
+
+  <section id="boundary" class="panel">
+    <div class="eyebrow">STEP 5</div>
+    <h2>청·일조계지</h2>
+    <div class="keyword">경계</div>
+    <p class="guide">걷는 동안 두 개 정도의 질문을 골라 이야기해보세요. 이곳의 경계를 바라보며, 사람 사이의 거리와 닮은 점이 있는지 천천히 돌아봅니다.</p>
+    <div class="question-wrap"><div class="question-label">오늘의 질문</div><div id="q-boundary" class="question" aria-live="polite"></div></div>
+    <div class="step-action">
+      <div class="step-action-label">한 걸음</div>
+      <div class="step-action-text">평소보다 조금 천천히 걸으며, 주변과 함께 걷는 사람들을 한 번 더 바라보세요.</div>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn primary" onclick="nextQuestion('boundary')">새 질문 뽑기 🎲</button>
+    </div>
+  </section>
+
+  <section id="cafe" class="panel">
+    <div class="eyebrow">STEP 6</div>
+    <h2>카페 나눔</h2>
+    <div class="keyword">연결</div>
+    <p class="guide">카페에서는 3~4개의 질문을 골라 오늘을 함께 돌아봅니다. 잘 정리된 소감보다, 마음에 남은 장면이나 이야기를 편하게 꺼내보세요.</p>
+    <div class="question-wrap"><div class="question-label">오늘의 나눔</div><div id="q-cafe" class="question" aria-live="polite"></div></div>
+    <div class="turn-box">
+      <div class="turn-label">이번 순서</div>
+      <div id="turn-cafe" class="turn-direction">질문을 뽑은 사람이 먼저!</div>
+      <div class="turn-note">시계방향 또는 반시계방향으로 돌아가며 답해요.<br>바로 답하기 어렵다면 한 번 패스하고 마지막에 다시 이야기해도 괜찮아요.</div>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn primary" onclick="nextQuestion('cafe')">새 질문 뽑기 🎲</button>
+    </div>
+  <div class="closing">
+      <div class="closing-label">마무리</div>
+      <p>
+        그들이 신앙을 품고 바다를 건넜다면,<br>
+        오늘 우리는 서로에게 다가가기 위해<br>
+        각자의 작은 바다를 건넜습니다.
+      </p>
+      <p class="closing-last">
+        오늘의 한 걸음이<br>
+        다음 만남의 첫마디로 이어지기를 바랍니다.
+      </p>
+    </div>
+    </section>
+
+  
+  <div class="gentle-note">
+    말하고 싶지 않은 질문은 한 번 넘겨도 괜찮아요.<br>
+    서로의 답을 평가하지 않고, 편하게 듣는 것만으로도 충분합니다.
+  </div>
+
+  <div class="footer">
+    2026 여기모여 SEASON 6 · 3조 7J1P<br>
+    그들이 건넌 바다, 우리가 건널 바다
+  </div>
+</div>
+
+<script>
+const questions = {
+  taxi: [
+    "오늘 오기 전에 가장 기대했던 것은 무엇인가요?",
+    "쉬는 날에는 집에서 쉬는 편인가요, 밖으로 나가는 편인가요?",
+    "요즘 자주 찾게 되는 음식이나 장소가 있나요?",
+    "요즘 나를 소소하게 기분 좋게 만드는 것은 무엇인가요?",
+    "최근에 나를 웃게 만든 일이 하나 있나요?",
+    "최근에 새롭게 해본 일이나 처음 가본 곳이 있나요?",
+    "어릴 때 좋아했던 것 중 지금도 좋아하는 것이 있나요?",
+    "사람들이 처음 봤을 때 잘 모르는 내 모습 하나가 있나요?",
+    "요즘 시간 가는 줄 모르고 하게 되는 일이 있나요?",
+    "오늘 일정 중 가장 기대되는 순간은 무엇인가요?"
+  ],
+  lunch: [
+    "요즘 새롭게 해보고 싶은 것이 있나요?",
+    "최근 누군가에게 고마웠던 순간이 있었나요?",
+    "내가 친해지기 쉬운 사람은 어떤 사람인가요?",
+    "사람들이 나를 처음 만났을 때 자주 오해하는 모습이 있나요?",
+    "주변 사람을 보면서 “저건 나도 닮고 싶다”라고 느끼는 모습이 있나요?",
+    "사람과 친해질 때 먼저 말을 거는 편인가요, 기다리는 편인가요?",
+    "누군가와 이야기할 때 “이 사람과 잘 통한다”라고 느끼는 순간은 언제인가요?",
+    "처음 만난 사람과 이야기할 때 어떤 주제가 나오면 조금 편해지나요?",
+    "최근 다른 사람의 이야기를 들으며 새롭게 알게 된 점이 있었나요?",
+    "함께 시간을 보내다 보면 자연스럽게 가까워지는 순간은 언제라고 생각하나요?"
+  ],
+  haean: [
+    "지금 이 순간, 잠시 내려놓고 싶은 생각이나 걱정이 있나요?",
+    "요즘 내 마음을 가장 많이 차지하고 있는 것은 무엇인가요?",
+    "지금 이 순간, 감사하게 느껴지는 것이 하나 있나요?"
+  ],
+  jemul: [
+    "오늘 내가 건너야 할 작은 ‘바다’가 있다면 무엇일까요?",
+    "내가 사람에게 먼저 다가가기 어려울 때는 언제인가요?",
+    "누군가에게 먼저 다가가기 위해 내가 할 수 있는 가장 작은 행동은 무엇일까요?",
+    "요즘 내가 한 걸음 내딛어 보고 싶은 일이 있나요?"
+  ],
+  boundary: [
+    "오늘 여기까지 오면서 새롭게 알게 된 점이 있나요?",
+    "처음에는 달라 보였지만, 이야기해보니 비슷하다고 느낀 점이 있었나요?",
+    "사람 사이의 ‘경계’를 조금 낮추려면 무엇이 필요할까요?",
+    "내가 누군가에게 먼저 다가가기 망설여지는 순간은 언제인가요?",
+    "오늘 함께 걸으며 마음이 조금 편해진 순간이 있었나요?",
+    "서로 다른 사람들이 가까워지기 위해 가장 필요한 것은 무엇이라고 생각하나요?"
+  ],
+  cafe: [
+    "오늘 가장 기억에 남은 순간 하나는 무엇인가요?",
+    "오늘 새롭게 알게 된 사람의 모습이나 이야기가 있나요?",
+    "오늘 내가 건넌 작은 ‘바다’가 있었다면 무엇이었나요?",
+    "오늘 이야기하면서 “생각보다 비슷하네”라고 느낀 순간이 있었나요?",
+    "오늘 누군가에게 고마웠던 순간이 있었나요?",
+    "오늘 가장 기억에 남은 말이나 이야기는 무엇인가요?",
+    "오늘의 만남을 한 단어로 표현한다면 무엇인가요?",
+    "오늘 이후에도 이어가고 싶은 작은 행동이 있나요?"
+  ]
+};
+
+const lastQuestionIndex = {};
+
+function pick(stage){
+  const arr = questions[stage];
+  let idx;
+
+  if (arr.length <= 1) {
+    idx = 0;
+  } else {
+    do {
+      idx = Math.floor(Math.random() * arr.length);
+    } while (idx === lastQuestionIndex[stage]);
+  }
+
+  lastQuestionIndex[stage] = idx;
+  document.getElementById('q-' + stage).textContent = arr[idx];
+
+  if (['taxi','lunch','cafe'].includes(stage)) {
+    const clockwise = Math.random() < 0.5;
+    const turnEl = document.getElementById('turn-' + stage);
+    if (turnEl) {
+      turnEl.textContent = clockwise
+        ? '→ 시계방향 · 질문을 뽑은 사람이 먼저!'
+        : '← 반시계방향 · 질문을 뽑은 사람이 먼저!';
+    }
+  }
+}
+
+function nextQuestion(stage){
+  pick(stage);
+}
+
+function openStage(stage){
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  const el = document.getElementById(stage);
+  el.classList.add('active');
+  pick(stage);
+  el.scrollIntoView({behavior:'smooth', block:'start'});
+}
+</script>
+</body>
+</html>
